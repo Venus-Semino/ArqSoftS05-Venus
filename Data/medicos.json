@@ -1,0 +1,58 @@
+﻿[
+  {
+    "Id": 1,
+    "Nombre": "Elena",
+    "Apellido": "Morales",
+    "Especialidad": "Dermatología",
+    "NumeroLicencia": "DE-45912"
+  },
+  {
+    "Id": 2,
+    "Nombre": "Fernando",
+    "Apellido": "Castro",
+    "Especialidad": "Neurología",
+    "NumeroLicencia": "NE-67341"
+  },
+  {
+    "Id": 3,
+    "Nombre": "Silvia",
+    "Apellido": "Ortiz",
+    "Especialidad": "Ginecología",
+    "NumeroLicencia": "GI-81203"
+  },
+  {
+    "Id": 4,
+    "Nombre": "Alejandro",
+    "Apellido": "Vargas",
+    "Especialidad": "Traumatología",
+    "NumeroLicencia": "TR-54098"
+  },
+  {
+    "Id": 5,
+    "Nombre": "Lucía",
+    "Apellido": "Mendoza",
+    "Especialidad": "Oftalmología",
+    "NumeroLicencia": "OF-23765"
+  },
+  {
+    "Id": 6,
+    "Nombre": "Diego",
+    "Apellido": "Navarro",
+    "Especialidad": "Psiquiatría",
+    "NumeroLicencia": "PS-90456"
+  },
+  {
+    "Id": 7,
+    "Nombre": "Gabriela",
+    "Apellido": "Ríos",
+    "Especialidad": "Oncología",
+    "NumeroLicencia": "ON-11894"
+  },
+  {
+    "Id": 8,
+    "Nombre": "Héctor",
+    "Apellido": "Cruz",
+    "Especialidad": "Endocrinología",
+    "NumeroLicencia": "EN-33210"
+  }
+]
