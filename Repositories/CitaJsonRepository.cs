@@ -1,12 +1,11 @@
 ﻿using System.Text.Json;
 using CitaApp.Models;
-using CitaApp.;
+using CitaApp.Interfaces;
 
 namespace CitaApp.Repositories
 {
     public class CitaJsonRepository : ICitaRepository
     {
-        // Ruta al archivo JSON
         private readonly string _filePath = "Data/citas.json";
 
         public IEnumerable<Cita> GetAll()
