@@ -1,10 +1,11 @@
-﻿using CitasApp.Models;
+﻿using System.Collections.Generic;
+using CitaApp.Models;
 
-namespace CitasApp.Interfaces
+namespace CitaApp.Interfaces
 {
     public interface IMedicoRepository
     {
-        List<Medico> ObtenerTodos();
-        Medico? ObtenerPorId(int id);
+        IEnumerable<Medico> GetAll();
+        Medico? GetById(int id);
     }
 }

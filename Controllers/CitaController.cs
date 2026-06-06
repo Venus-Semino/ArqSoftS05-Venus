@@ -1,7 +1,7 @@
 ﻿using CitaApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CitasApp.Controllers
+namespace CitaApp.Controllers
 {
     public class CitaController : Controller
     {

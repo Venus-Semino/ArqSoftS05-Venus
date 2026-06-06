@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Repositories\MedicoJsonRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Repositories\MedicoJsonRepository.cs" />
+  </ItemGroup>
+
 </Project>
