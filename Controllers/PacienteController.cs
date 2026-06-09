@@ -1,23 +1,19 @@
-﻿
+﻿using CitasApp.Domain.Models;
+using CitasApp.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using CitasApp.Domain.Models;
 
-namespace CitaApp.Web.Controllers
+namespace CitasApp.Controllers
 {
     public class PacienteController : Controller
     {
-        private static List<Paciente> _pacientes = new()
-        {
-            new Paciente { Id = 1, Nombre = "Ana",   Apellido = "García",   Email = "ana@mail.com",   Telefono = "555-0001" },
-            new Paciente { Id = 2, Nombre = "Luis",  Apellido = "Martínez", Email = "luis@mail.com",  Telefono = "555-0002" },
-            new Paciente { Id = 3, Nombre = "María", Apellido = "López",    Email = "maria@mail.com", Telefono = "555-0003" },
-        };
+        private readonly IPacienteRepository _repo;
+        public PacienteController(IPacienteRepository repo) { _repo = repo; }
 
-        public IActionResult Index() => View(_pacientes);
+        public IActionResult Index() => View(_repo.GetAll());
 
         public IActionResult Detalle(int id)
         {
-            var paciente = _pacientes.FirstOrDefault(p => p.Id == id);
+            var paciente = _repo.GetById(id);
             return paciente == null ? NotFound() : View(paciente);
         }
     }
