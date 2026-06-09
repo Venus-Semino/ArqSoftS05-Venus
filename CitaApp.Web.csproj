@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Repositories\MedicoJsonRepository.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Repositories\MedicoJsonRepository.cs" />
+    <ProjectReference Include="..\CitasApp.Domain\CitasApp.Domain.csproj" />
+    <ProjectReference Include="..\CitasApp.Infrastructure\CitasApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
