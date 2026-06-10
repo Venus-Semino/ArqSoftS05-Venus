@@ -1,23 +1,51 @@
-﻿using CitaApp.Models;
+﻿using CitaApp.Interfaces;
+using CitaApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CitaApp.Controllers
 {
     public class PacienteController : Controller
     {
-        private static List<Paciente> _pacientes = new()
-        {
-            new Paciente { Id = 1, Nombre = "Ana",   Apellido = "García",   Email = "ana@mail.com",   Telefono = "555-0001" },
-            new Paciente { Id = 2, Nombre = "Luis",  Apellido = "Martínez", Email = "luis@mail.com",  Telefono = "555-0002" },
-            new Paciente { Id = 3, Nombre = "María", Apellido = "López",    Email = "maria@mail.com", Telefono = "555-0003" },
-        };
+        private readonly IPacienteRepository _pacienteRepo;
 
-        public IActionResult Index() => View(_pacientes);
+        public PacienteController(IPacienteRepository pacienteRepo)
+        {
+            _pacienteRepo = pacienteRepo;
+        }
+
+        public IActionResult Index()
+        {
+            var pacientes = _pacienteRepo.GetAll();
+            return View(pacientes);
+        }
 
         public IActionResult Detalle(int id)
         {
-            var paciente = _pacientes.FirstOrDefault(p => p.Id == id);
-            return paciente == null ? NotFound() : View(paciente);
+            var paciente = _pacienteRepo.GetById(id);
+            if (paciente == null)
+            {
+                return NotFound();
+            }
+            return View(paciente);
+        }
+
+        // GET: Paciente/Crear
+        public IActionResult Crear()
+        {
+            return View();
+        }
+
+        // POST: Paciente/Crear
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Crear(Paciente paciente)
+        {
+            if (ModelState.IsValid)
+            {
+                _pacienteRepo.Add(paciente);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(paciente);
         }
     }
 }

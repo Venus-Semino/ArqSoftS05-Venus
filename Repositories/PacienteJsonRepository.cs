@@ -11,6 +11,7 @@ namespace CitaApp.Repositories
         public IEnumerable<Paciente> GetAll()
         {
             if (!File.Exists(_filePath)) return new List<Paciente>();
+
             string json = File.ReadAllText(_filePath);
             return JsonSerializer.Deserialize<List<Paciente>>(json) ?? new List<Paciente>();
         }
@@ -23,9 +24,12 @@ namespace CitaApp.Repositories
         public void Add(Paciente paciente)
         {
             var pacientes = GetAll().ToList();
+
             paciente.Id = pacientes.Any() ? pacientes.Max(p => p.Id) + 1 : 1;
             pacientes.Add(paciente);
-            File.WriteAllText(_filePath, JsonSerializer.Serialize(pacientes, new JsonSerializerOptions { WriteIndented = true }));
+
+            string json = JsonSerializer.Serialize(pacientes, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_filePath, json);
         }
     }
 }

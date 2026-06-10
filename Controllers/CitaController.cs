@@ -1,44 +1,68 @@
-﻿using CitaApp.Models;
+﻿using CitaApp.Interfaces;
+using CitaApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CitaApp.Controllers
 {
     public class CitaController : Controller
     {
-        private static List<Paciente> _pacientes = new()
-        {
-            new Paciente { Id = 1, Nombre = "Ana",   Apellido = "García"   },
-            new Paciente { Id = 2, Nombre = "Luis",  Apellido = "Martínez" },
-            new Paciente { Id = 3, Nombre = "María", Apellido = "López"    },
-        };
+        private readonly ICitaRepository _citaRepo;
+        private readonly IPacienteRepository _pacienteRepo;
+        private readonly IMedicoRepository _medicoRepo;
 
-        private static List<Medico> _medicos = new()
+        public CitaController(ICitaRepository citaRepo, IPacienteRepository pacienteRepo, IMedicoRepository medicoRepo)
         {
-            new Medico { Id = 1, Nombre = "Carlos",   Apellido = "Reyes"   },
-            new Medico { Id = 2, Nombre = "Patricia",  Apellido = "Vega"   },
-            new Medico { Id = 3, Nombre = "Roberto",  Apellido = "Sánchez" },
-        };
-
-        private static List<Cita> _citas = new()
-        {
-            new Cita { Id = 1, PacienteId = 1, MedicoId = 1, Fecha = new DateOnly(2026, 6, 1), Hora = new TimeOnly(9,  0), Motivo = "Consulta general",      Estado = "Confirmada" },
-            new Cita { Id = 2, PacienteId = 2, MedicoId = 2, Fecha = new DateOnly(2026, 6, 1), Hora = new TimeOnly(10, 0), Motivo = "Revisión de resultados", Estado = "Pendiente"  },
-            new Cita { Id = 3, PacienteId = 3, MedicoId = 1, Fecha = new DateOnly(2026, 6, 3), Hora = new TimeOnly(11, 0), Motivo = "Primera consulta",       Estado = "Pendiente"  },
-        };
+            _citaRepo = citaRepo;
+            _pacienteRepo = pacienteRepo;
+            _medicoRepo = medicoRepo;
+        }
 
         public IActionResult Index()
         {
-            ViewBag.Pacientes = _pacientes;
-            ViewBag.Medicos = _medicos;
-            return View(_citas);
+            ViewBag.Pacientes = _pacienteRepo.GetAll().ToList();
+            ViewBag.Medicos = _medicoRepo.GetAll().ToList();
+            var citas = _citaRepo.GetAll().ToList();
+            return View(citas);
         }
 
         public IActionResult PorPaciente(int pacienteId)
         {
-            var citas = _citas.Where(c => c.PacienteId == pacienteId).ToList();
-            ViewBag.Pacientes = _pacientes;
-            ViewBag.Medicos = _medicos;
+            ViewBag.Pacientes = _pacienteRepo.GetAll().ToList();
+            ViewBag.Medicos = _medicoRepo.GetAll().ToList();
+            var citas = _citaRepo.GetByPacienteId(pacienteId).ToList();
             return View(citas);
+        }
+
+        // GET: Cita/Crear
+        public IActionResult Crear()
+        {
+            // Creamos listas con formato "Nombre Apellido" para los menús desplegables
+            var listaPacientes = _pacienteRepo.GetAll().Select(p => new { Id = p.Id, NombreCompleto = $"{p.Nombre} {p.Apellido}" });
+            var listaMedicos = _medicoRepo.GetAll().Select(m => new { Id = m.Id, NombreCompleto = $"{m.Nombre} {m.Apellido}" });
+
+            ViewBag.Pacientes = new SelectList(listaPacientes, "Id", "NombreCompleto");
+            ViewBag.Medicos = new SelectList(listaMedicos, "Id", "NombreCompleto");
+            return View();
+        }
+
+        // POST: Cita/Crear
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Crear(Cita cita)
+        {
+            if (ModelState.IsValid)
+            {
+                _citaRepo.Add(cita);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var listaPacientes = _pacienteRepo.GetAll().Select(p => new { Id = p.Id, NombreCompleto = $"{p.Nombre} {p.Apellido}" });
+            var listaMedicos = _medicoRepo.GetAll().Select(m => new { Id = m.Id, NombreCompleto = $"{m.Nombre} {m.Apellido}" });
+
+            ViewBag.Pacientes = new SelectList(listaPacientes, "Id", "NombreCompleto", cita.PacienteId);
+            ViewBag.Medicos = new SelectList(listaMedicos, "Id", "NombreCompleto", cita.MedicoId);
+            return View(cita);
         }
     }
 }

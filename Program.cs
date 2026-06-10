@@ -1,7 +1,14 @@
+using CitaApp.Interfaces;
+using CitaApp.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IPacienteRepository, PacienteJsonRepository>();
+builder.Services.AddScoped<IMedicoRepository, MedicoJsonRepository>();
+builder.Services.AddScoped<ICitaRepository, CitaJsonRepository>();
 
 var app = builder.Build();
 
@@ -24,6 +31,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

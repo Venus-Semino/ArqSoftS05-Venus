@@ -1,23 +1,35 @@
-﻿using CitaApp.Models;
+﻿using CitaApp.Interfaces;
+using CitaApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CitaApp.Controllers
 {
     public class MedicoController : Controller
     {
-        private static List<Medico> _medicos = new()
-        {
-            new Medico { Id = 1, Nombre = "Carlos",  Apellido = "Reyes",   Especialidad = "Medicina General", NumeroLicencia = "MG-10421" },
-            new Medico { Id = 2, Nombre = "Patricia", Apellido = "Vega",   Especialidad = "Pediatría",        NumeroLicencia = "PD-20835" },
-            new Medico { Id = 3, Nombre = "Roberto",  Apellido = "Sánchez", Especialidad = "Cardiología",     NumeroLicencia = "CA-30117" },
-        };
+        private readonly IMedicoRepository _medicoRepo;
 
-        public IActionResult Index() => View(_medicos);
+        // Inyectamos la interfaz del repositorio
+        public MedicoController(IMedicoRepository medicoRepo)
+        {
+            _medicoRepo = medicoRepo;
+        }
+
+        public IActionResult Index()
+        {
+            // Usamos el repositorio para obtener los datos del JSON
+            var medicos = _medicoRepo.GetAll();
+            return View(medicos);
+        }
 
         public IActionResult Detalle(int id)
         {
-            var medico = _medicos.FirstOrDefault(m => m.Id == id);
-            return medico == null ? NotFound() : View(medico);
+            // Usamos el repositorio para buscar por ID
+            var medico = _medicoRepo.GetById(id);
+            if (medico == null)
+            {
+                return NotFound();
+            }
+            return View(medico);
         }
     }
 }
