@@ -1,7 +1,4 @@
-﻿@using CitasApp.Domain.Models
-
-
-﻿@Model List<CitasApp.Domain.Models.Paciente>
+﻿﻿﻿@Model List<CitasApp.Models.Paciente>
 <h1>Pacientes registrados</h1>
 <table border="1" cellpadding="8">
     <tr>
@@ -19,4 +16,5 @@
             <td><a asp-action="Detalle" asp-route-id="@p.Id">Ver detalle</a></td>
         </tr>
     }
+    <a asp-action="Crear" class="btn btn-primary mb-3">Registrar Nuevo Paciente</a>
 </table>
